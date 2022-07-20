@@ -1,41 +1,94 @@
-.mvdp-frame {
+.mvdp-layout {
   width: 100%;
   height: 100%;
 }
 
-.mvdp-crop {
+.mvdp-composite {
   width: 100%;
   overflow: hidden;
+  display: grid;
+  place-items: center;
+  grid-template-areas: 'layer-div';
+}
+
+.mvdp-layer {
+  grid-area: layer-div;
+}
+
+.mvdp-spinner-layer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mvdp-spinner-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mvdp-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.5);
+  border-top: 4px solid white;
+  border-radius: 50%;
 }
 
 .mvdp-video {
   position: relative;
+  grid-area: layer-div;
 }
 
-.mvdp-playbar {
-  background-color: rgb(255, 128, 234);
-  width: 100%;
+.mvdp-playback-control {
+  background-color: gray;
   height: 48px;
   display: flex;
+  padding: 0 8px;
+  gap: 8px;
 }
 
 .mvdp-icon {
   width: 36px;
   fill: white;
-  margin: 0 6px;
+  cursor: pointer;
+  margin: auto;
 }
 
-.mvdp-trackbar {
-  background-color: darkolivegreen;
-  width: 100%;
-  height: 96px;
+.mvdp-timestamp {
+  margin: auto;
+  color: white;
+}
+
+.mvdp-timebar {
+  flex-grow: 1;
+  background-color: darkgray;
+  height: 8px;
+  margin: auto;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mvdp-timebar-core {
+  background-color: white;
+  height: 100%;
+}
+
+.mvdp-track-control {
+  background-color: gray;
+  height: 64px;
   display: flex;
   cursor: e-resize;
+  border-top: 1px solid darkgray;
 }
 
 .mvdp-track-indicator {
-  background-color: gray;
-  border-radius: 6px;
+  background-color: darkgray;
+  border-radius: 50%;
   width: 12px;
   height: 12px;
   margin: auto;
@@ -43,9 +96,40 @@
 }
 
 .mvdp-active-track {
-  background-color: aqua;
+  background-color: white;
 }
 
-.test {
-  display: flex;
+
+/* Loading spinner */
+.mvdp-spinner {
+  -webkit-transition-property: -webkit-transform;
+  -webkit-transition-duration: 1.2s;
+  -webkit-animation-name: mvdp-rotate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+
+  -moz-transition-property: -moz-transform;
+  -moz-animation-name: mvdp-rotate;
+  -moz-animation-duration: 1.2s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+
+  transition-property: transform;
+  animation-name: mvdp-rotate;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@-webkit-keyframes mvdp-rotate {
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes mvdp-rotate {
+  from {-moz-transform: rotate(0deg);}
+  to {-moz-transform: rotate(360deg);}
+}
+@keyframes mvdp-rotate {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
 }
