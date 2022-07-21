@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import useEventListeners from './useEventListeners';
 
 
-type VideoState = {
+export type VideoState = {
   isPlaying: boolean;
   isWaiting: boolean;
   currentTime: number;
@@ -12,7 +12,7 @@ type VideoState = {
 }
 
 
-export default function useVideoState(): [React.RefObject<HTMLVideoElement>, VideoState, React.RefObject<HTMLDivElement>] {
+export default function useVideoState(): [React.RefObject<HTMLVideoElement>, VideoState] {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoState, setVideoState] = useState<VideoState>({
     isPlaying: false,
@@ -22,7 +22,6 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
     volume: 0,
     muted: true
   });
-  const timebarRef = useRef<HTMLDivElement>(null);
 
   useEventListeners(videoRef,
     [
@@ -91,10 +90,5 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
     }
   });
 
-  useEventListeners(timebarRef, ['click'], event => {
-    const seekRatio = (event as PointerEvent).offsetX / timebarRef.current!.offsetWidth;
-    videoRef.current!.currentTime = seekRatio * videoState.duration;
-  });
-
-  return [videoRef, videoState, timebarRef];
+  return [videoRef, videoState];
 }

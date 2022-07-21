@@ -25,7 +25,7 @@ const getPointerEventPageX = (event: Event): number => {
 
 // Main
 export default function useTrackControl(trackCount: number): [number, React.Dispatch<React.SetStateAction<number>>, React.RefObject<HTMLDivElement>] {
-  const [trackIndex, setTrackIndex] = useState(0);
+  const [trackCurrentIndex, setTrackCurrentIndex] = useState(0);
   const [mouseState, setMouseState] = useState({active: false, movement: 0, previousPageX: 0});
   const trackBarRef = useRef<HTMLDivElement>(null);
 
@@ -50,7 +50,7 @@ export default function useTrackControl(trackCount: number): [number, React.Disp
         if (Math.abs(currentMovement) > trackSegmentLength) {
           const sign = Math.sign(currentMovement);
           currentMovement += -sign * trackSegmentLength;
-          setTrackIndex((((trackIndex + sign) % trackCount) + trackCount) % trackCount);
+          setTrackCurrentIndex((((trackCurrentIndex + sign) % trackCount) + trackCount) % trackCount);
         }
         setMouseState({...mouseState, movement: currentMovement, previousPageX: currentPageX});
         break;
@@ -68,5 +68,5 @@ export default function useTrackControl(trackCount: number): [number, React.Disp
     }
   });
 
-  return [trackIndex, setTrackIndex, trackBarRef];
+  return [trackCurrentIndex, setTrackCurrentIndex, trackBarRef];
 }

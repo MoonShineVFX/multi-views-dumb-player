@@ -1,0 +1,42 @@
+.playbackControl {
+    background-color: gray;
+    height: 48px;
+    display: flex;
+    padding: 0 16px;
+    gap: 16px;
+}
+
+.icon {
+    width: 36px;
+    fill: white;
+    cursor: pointer;
+    margin: auto;
+}
+
+.timeBar {
+    flex-grow: 1;
+    background-color: darkgray;
+    height: 8px;
+    margin: auto;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.timeBarCore {
+    background-color: white;
+    height: 100%;
+}
+
+.text {
+    margin: auto;
+    color: white;
+
+    /*  No select  */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
