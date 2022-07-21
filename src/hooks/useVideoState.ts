@@ -36,7 +36,8 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
           isPlaying: !videoRef.current!.paused,
           currentTime: videoRef.current!.currentTime,
           volume: videoRef.current!.volume,
-          muted: videoRef.current!.muted
+          muted: videoRef.current!.muted,
+          duration: videoRef.current!.duration
         });
         break;
       // Duration
