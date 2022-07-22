@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
+import SETTINGS from '../SETTINGS';
 
 import useEventListeners from './useEventListeners';
 
 
 // Defines
 const IS_TOUCHABLE = navigator.maxTouchPoints > 0;
-const TRACK_SWIPE_SPEED = 0.5;
 const POINTER_EVENT = {
   down: IS_TOUCHABLE ? 'touchstart' : 'mousedown',
   up: IS_TOUCHABLE ? 'touchend' : 'mouseup',
@@ -46,7 +46,7 @@ export default function useTrackControl(trackCount: number): [number, React.Disp
         if (!mouseState.active) return;
         const currentPageX = getPointerEventPageX(event);
         let currentMovement = mouseState.movement + currentPageX - mouseState.previousPageX;
-        const trackSegmentLength = trackBarRef.current!.offsetWidth / trackCount * TRACK_SWIPE_SPEED;
+        const trackSegmentLength = trackBarRef.current!.offsetWidth / trackCount * SETTINGS.TRACK_SWIPE_SPEED;
         if (Math.abs(currentMovement) > trackSegmentLength) {
           const sign = Math.sign(currentMovement);
           currentMovement += -sign * trackSegmentLength;

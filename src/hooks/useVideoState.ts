@@ -25,7 +25,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
 
   useEventListeners(videoRef,
     [
-      'pause', 'playing', 'waiting', 'canplay',
+      'pause', 'playing', 'waiting', 'canplay', 'seeking', 'seeked',
       'durationchange', 'timeupdate', 'volumechange'], event => {
     switch (event.type) {
       // Initial
@@ -54,6 +54,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
         });
         break;
       // Play
+      case 'seeked':
       case 'playing':
         setVideoState({
           ...videoState,
@@ -71,6 +72,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
         break;
       // Waiting
       case 'waiting':
+      case 'seeking':
         setVideoState({
           ...videoState,
           isWaiting: true
