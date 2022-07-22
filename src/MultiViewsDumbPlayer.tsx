@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import styles from './MultiViewsDumbPlayer.module.css';
 
-import './MultiViewsDumbPlayer.css';
+import { IconPlay, IconPause } from './icons';
 
 import useElementSize from './hooks/useElementSize';
 import useTrackControl from './hooks/useTrackControl';
@@ -28,6 +29,9 @@ function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
   const [layoutRef, layoutSize] = useElementSize<HTMLDivElement>();
   const [videoRef, videoState] = useVideoState();
 
+  const [NotifyIcons, setNotifyIcons] = useState<(React.FC<React.SVGProps<SVGSVGElement>> | null)[]>([null]);
+  useEffect(() => setNotifyIcons([null]), [videoState.isLoading]);
+
   // Dynamic styles
   const aspect = props.videoWidth / props.videoHeight;
   const displayHeight = layoutSize.width / aspect;
@@ -46,39 +50,83 @@ function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
       left: trackCurrentIndex % props.columnCount * -layoutSize.width,
       top: Math.floor(trackCurrentIndex / props.columnCount) * -displayHeight
     },
-    spinner: {
-      display: videoState.isWaiting ? 'block' : 'none'
+    overlay: {
+      backgroundColor: videoState.isLoading ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
+    }
+  };
+
+  // Video play/pause notify
+  const onVideoClick = () => {
+    if (videoState.isLoading) return;
+
+    let NotifyIcon: React.FC<React.SVGProps<SVGSVGElement>>;
+    if (videoState.isPlaying) {
+      videoRef.current!.pause();
+      NotifyIcon = IconPause;
+    } else {
+      videoRef.current!.play();
+      NotifyIcon = IconPlay;
+    }
+
+    if (NotifyIcons.length < 2) {
+      setNotifyIcons([null, NotifyIcon]);
+    } else {
+      setNotifyIcons([NotifyIcon])
     }
   };
 
   // Render
-  return <div className='mvdp'>
-    <div ref={layoutRef} className='mvdp-layout' style={dynamicStyle.layout}>
-      <div className='mvdp-composite' style={dynamicStyle.composite}>
-        <div className='mvdp-layer' style={dynamicStyle.composite}>
-          <video ref={videoRef} className='mvdp-video' style={dynamicStyle.video}
-                 autoPlay={true} playsInline={true} loop={true}>
+  return <div className='multi-views-dumb-player'>
+    <div ref={layoutRef} className={styles.layout} style={dynamicStyle.layout}>
+
+      <div className={styles.composite} style={dynamicStyle.composite}>
+
+        <Layer style={dynamicStyle.composite}>
+          <video ref={videoRef} className={styles.video} style={dynamicStyle.video}
+                 autoPlay={true} playsInline={true} loop={true}
+                 onClick={onVideoClick}
+                 onContextMenu={event => event.preventDefault()}>
             <source src={props.url}/>
           </video>
-        </div>
-        <div className='mvdp-layer mvdp-spinner-layer' style={dynamicStyle.spinner}>
-          <div className='mvdp-spinner-container'>
-            <div className='mvdp-spinner' />
+        </Layer>
+
+        <Layer className={styles.overlayLayer} style={dynamicStyle.overlay}>
+          <div className={styles.overlayContainer}>
+            {
+              NotifyIcons.map<JSX.Element | undefined>((NotifyIcon, index) => {
+                if (!NotifyIcon) return undefined;
+                return <NotifyIcon className={styles.notifyIcon} key={index}/>
+              })
+            }
+            { videoState.isLoading && <div className={styles.loadingIcon} /> }
           </div>
-        </div>
+        </Layer>
+
       </div>
+
       <PlaybackControl
        videoRef={videoRef}
        videoState={videoState}
       />
+
       <TrackControl
         ref={trackControlRef}
         trackCount={trackCount} trackCurrentIndex={trackCurrentIndex}
         onIndicatorClick={trackNumber => setTrackCurrentIndex(trackNumber)}
       />
+
     </div>
   </div>
 }
 
 
 export default MultiViewsDumbPlayer;
+
+
+function Layer(props: {className?: string, style: React.CSSProperties, children?: React.ReactNode}): JSX.Element {
+  let className = styles.layer;
+  if (props.className) className += ' ' + props.className;
+  return <div className={className} style={props.style}>
+    {props.children}
+  </div>
+}

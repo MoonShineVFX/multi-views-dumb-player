@@ -7,13 +7,13 @@
 }
 
 /* Icon */
-.icon {
+.buttonIcon {
     width: 36px;
     fill: white;
     cursor: pointer;
     margin: auto;
 }
-.icon:hover {
+.buttonIcon:hover {
     fill: aquamarine;
 }
 
@@ -26,7 +26,7 @@
     position: absolute;
     width: 36px;
     height: 100px;
-    padding-bottom: 8px;
+    padding: 32px 0 8px 0;
     transform: translateY(-100%);
 }
 

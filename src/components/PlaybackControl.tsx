@@ -1,11 +1,6 @@
 import React, {useRef, useState} from 'react';
 
-import {ReactComponent as IconPause} from "../icons/pause.svg";
-import {ReactComponent as IconPlay} from "../icons/play_arrow.svg";
-import {ReactComponent as IconVolumeOff} from "../icons/volume_off.svg";
-import {ReactComponent as IconVolumeUp} from "../icons/volume_up.svg";
-import {ReactComponent as IconVolumeDown} from "../icons/volume_down.svg";
-import {ReactComponent as IconVolumeMute} from "../icons/volume_mute.svg";
+import { IconPause, IconVolumeMute, IconVolumeDown, IconVolumeOff, IconPlay, IconVolumeUp } from '../icons';
 
 import { VideoState } from "../hooks/useVideoState";
 
@@ -24,14 +19,14 @@ export default function PlaybackControl(props: PlaybackControlProps): JSX.Elemen
   const { videoState, videoRef } = props;
   
   // Hooks
-  const [volumeSliderPop, setVolumeSliderPop] = useState(false);
+  const [isVolumeHover, setIsVolumeHover] = useState(false);
   const timeBarRef = useRef<HTMLDivElement>(null);
   const volumeSliderRef = useRef<HTMLDivElement>(null);
 
   // Dynamic styles
   const dynamicStyle = {
     volumeSliderContainer: {
-      display: volumeSliderPop ? 'block' : 'none'
+      display: isVolumeHover ? 'block' : 'none'
     },
     volumeSliderCore: {
       height: videoState.volume * 100 + '%',
@@ -80,15 +75,15 @@ export default function PlaybackControl(props: PlaybackControlProps): JSX.Elemen
     {
       !SETTINGS.IS_MOBILE() &&
       <div className={styles.volumeContainer}
-           onMouseEnter={() => setVolumeSliderPop(true)}
-           onMouseLeave={() => setVolumeSliderPop(false)}>
+           onMouseEnter={() => setIsVolumeHover(true)}
+           onMouseLeave={() => setIsVolumeHover(false)}>
         <div className={styles.volumeSliderContainer} style={dynamicStyle.volumeSliderContainer}>
           <div ref={volumeSliderRef} className={styles.volumeSlider} onClick={onVolumeSliderClick}>
             <div className={styles.volumeSliderCore} style={dynamicStyle.volumeSliderCore} />
           </div>
         </div>
         <VolumeButton
-          className={styles.icon}
+          className={styles.buttonIcon}
           onClick={() => videoRef.current!.muted = !videoRef!.current!.muted} />
       </div>
     }
@@ -104,7 +99,7 @@ export default function PlaybackControl(props: PlaybackControlProps): JSX.Elemen
 // PlayButton
 function PlayButton(props: {isPlaying: boolean, onClick: () => void}): JSX.Element {
   const CurrentButton = props.isPlaying ? IconPause : IconPlay;
-  return <CurrentButton className={styles.icon} onClick={props.onClick} />
+  return <CurrentButton className={styles.buttonIcon} onClick={props.onClick} />
 }
 
 

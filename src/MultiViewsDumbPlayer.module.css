@@ -1,0 +1,88 @@
+.layout {
+  width: 100%;
+  height: 100%;
+}
+
+.composite {
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  grid-template-areas: 'layer-div';
+}
+
+.layer {
+  grid-area: layer-div;
+}
+
+.video {
+  position: relative;
+  grid-area: layer-div;
+}
+
+.overlayLayer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-out;
+  pointer-events: none;
+}
+
+.overlayContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Notify */
+.notifyIcon {
+  width: 25%;
+  height: 25%;
+  fill: white;
+  animation: notify-fade-out 0.8s forwards;
+  animation-timing-function: ease-out;
+}
+.notifyIcon svg {
+  width: 1024px;
+  height: 1024px;
+}
+@keyframes notify-fade-out {
+  0% {
+    display: block;
+    opacity: 1;
+    transform: scale(100%);
+  }
+  1% {
+    display: block;
+    opacity: 1;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    transform: scale(135%);
+  }
+}
+
+/* Loading */
+.loadingIcon {
+  width: 80px;
+  height: 80px;
+  border: 6px solid rgba(255, 255, 255, 0.5);
+  border-top: 6px solid white;
+  border-radius: 50%;
+}
+.loadingIcon {
+  transition-property: transform;
+  animation-name: loading-rotate;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes loading-rotate {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}

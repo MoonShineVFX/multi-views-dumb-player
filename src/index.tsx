@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 
 
 const MultiViewsDumbPlayerSettings = {
-  url: 'demo.mp4',
+  url: 'an-dance.mp4',
   videoWidth: 3840,
   videoHeight: 2160,
   columnCount: 4,

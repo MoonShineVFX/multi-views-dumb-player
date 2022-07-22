@@ -4,7 +4,7 @@ import useEventListeners from './useEventListeners';
 
 export type VideoState = {
   isPlaying: boolean;
-  isWaiting: boolean;
+  isLoading: boolean;
   currentTime: number;
   duration: number;
   volume: number;
@@ -16,7 +16,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoState, setVideoState] = useState<VideoState>({
     isPlaying: false,
-    isWaiting: false,
+    isLoading: true,
     currentTime: 0,
     duration: 0,
     volume: 0,
@@ -33,6 +33,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
         setVideoState({
           ...videoState,
           isPlaying: !videoRef.current!.paused,
+          isLoading: false,
           currentTime: videoRef.current!.currentTime,
           volume: videoRef.current!.volume,
           muted: videoRef.current!.muted,
@@ -59,7 +60,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
         setVideoState({
           ...videoState,
           isPlaying: true,
-          isWaiting: false,
+          isLoading: false,
           currentTime: videoRef.current!.currentTime
         });
         break;
@@ -75,7 +76,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
       case 'seeking':
         setVideoState({
           ...videoState,
-          isWaiting: true
+          isLoading: true
         })
         break;
       // Volume
