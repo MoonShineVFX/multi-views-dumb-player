@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styles from './MultiViewsDumbPlayer.module.css';
 
-import { IconPlay, IconPause } from './icons';
+import {IconPlay, IconPause} from './icons';
 
 import useElementSize from './hooks/useElementSize';
 import useTrackControl from './hooks/useTrackControl';
@@ -9,26 +9,57 @@ import useVideoState from './hooks/useVideoState';
 
 import TrackControl from "./components/TrackControl";
 import PlaybackControl from "./components/PlaybackControl";
+import MultiVisionPlayer from 'multi-vision-player';
+
+
+export enum MultiViewsDumbPlayerCore {
+  TILES,
+  MEDIA_SOURCE_EXTENSION
+}
 
 
 type MultiViewsDumbPlayerProps = {
   width?: number;
   videoWidth: number;
   videoHeight: number;
-  columnCount: number;
-  rowCount: number;
+  columnCount?: number;
+  rowCount?: number;
   url: string;
+  core?: MultiViewsDumbPlayerCore
 }
 
-function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
+export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
   // Defines
-  const trackCount = props.columnCount * props.rowCount;
+  const isMSE = props.core === MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION;
 
   // Hooks
+  const [trackCount, setTrackCount] = useState(isMSE ? 1 : props.columnCount! * props.rowCount!);
   const [trackCurrentIndex, setTrackCurrentIndex, trackControlRef] = useTrackControl(trackCount);
   const [layoutRef, layoutSize] = useElementSize<HTMLDivElement>();
   const [videoRef, videoState] = useVideoState();
+  const [msePlayer, setMsePlayer] = useState<MultiVisionPlayer | null>(null);
 
+  // MSE Video addons
+  useEffect(() => {
+    if (isMSE && videoRef.current && !msePlayer) {
+      console.log('initial: ', videoRef.current);
+      setMsePlayer(new MultiVisionPlayer(
+        videoRef.current, props.url,
+        {
+          streamHost: `${window.location.protocol}//${window.location.host}`
+        },
+        true,
+        metadata => setTrackCount(metadata.cameraCount)
+      ));
+    }
+  }, [isMSE, videoRef.current]);
+  useEffect(() => {
+    if (msePlayer) {
+      msePlayer.requestChangeCameraByIndex(trackCurrentIndex + 1);
+    }
+  }, [trackCurrentIndex]);
+
+  // Motify Icons
   const [NotifyIcons, setNotifyIcons] = useState<(React.FC<React.SVGProps<SVGSVGElement>> | null)[]>([null]);
   useEffect(() => setNotifyIcons([null]), [videoState.isLoading]);
 
@@ -44,11 +75,17 @@ function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
       width: layoutSize.width,
       height: displayHeight
     },
-    video: {
-      width: layoutSize.width * props.columnCount,
-      height: displayHeight * props.rowCount,
-      left: trackCurrentIndex % props.columnCount * -layoutSize.width,
-      top: Math.floor(trackCurrentIndex / props.columnCount) * -displayHeight
+    videoTiles: {
+      width: layoutSize.width * props.columnCount!,
+      height: displayHeight * props.rowCount!,
+      left: trackCurrentIndex % props.columnCount! * -layoutSize.width,
+      top: Math.floor(trackCurrentIndex / props.columnCount!) * -displayHeight
+    },
+    videoMSE: {
+      width: layoutSize.width,
+      height: displayHeight,
+      left: 0,
+      top: 0
     },
     overlay: {
       backgroundColor: videoState.isLoading ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
@@ -82,11 +119,11 @@ function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
       <div className={styles.composite} style={dynamicStyle.composite}>
 
         <Layer style={dynamicStyle.composite}>
-          <video ref={videoRef} className={styles.video} style={dynamicStyle.video}
+          <video ref={videoRef} className={styles.video} style={isMSE ? dynamicStyle.videoMSE : dynamicStyle.videoTiles}
                  autoPlay={true} playsInline={true} loop={true}
                  onClick={onVideoClick}
                  onContextMenu={event => event.preventDefault()}>
-            <source src={props.url}/>
+            {!isMSE && <source src={props.url}/>}
           </video>
         </Layer>
 
@@ -118,9 +155,6 @@ function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
     </div>
   </div>
 }
-
-
-export default MultiViewsDumbPlayer;
 
 
 function Layer(props: {className?: string, style: React.CSSProperties, children?: React.ReactNode}): JSX.Element {
