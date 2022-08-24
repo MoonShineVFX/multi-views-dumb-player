@@ -10,12 +10,12 @@ const root = ReactDOM.createRoot(
 
 
 const MultiViewsDumbPlayerSettings = {
-  url: 'an-dance-low', // an-dance.mp4 or an-dance-low dataName in MSE
+  url: 'an-dance.mp4', // an-dance.mp4 or an-dance-low dataName in MSE
   videoWidth: 3840,
   videoHeight: 2160,
   columnCount: 4,
   rowCount: 4,
-  core: MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION
+  core: MultiViewsDumbPlayerCore.TILES
 }
 
 
