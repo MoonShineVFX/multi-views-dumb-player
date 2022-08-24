@@ -3,7 +3,6 @@ import styles from './MultiViewsDumbPlayer.module.css';
 
 import {IconPlay, IconPause} from './icons';
 
-import useElementSize from './hooks/useElementSize';
 import useTrackControl from './hooks/useTrackControl';
 import useVideoState from './hooks/useVideoState';
 
@@ -20,8 +19,6 @@ export enum MultiViewsDumbPlayerCore {
 
 type MultiViewsDumbPlayerProps = {
   width?: number;
-  videoWidth: number;
-  videoHeight: number;
   columnCount?: number;
   rowCount?: number;
   url: string;
@@ -35,7 +32,6 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   // Hooks
   const [trackCount, setTrackCount] = useState(isMSE ? 1 : props.columnCount! * props.rowCount!);
   const [trackCurrentIndex, setTrackCurrentIndex, trackControlRef] = useTrackControl(trackCount);
-  const [layoutRef, layoutSize] = useElementSize<HTMLDivElement>();
   const [videoRef, videoState] = useVideoState();
   const [msePlayer, setMsePlayer] = useState<MultiVisionPlayer | null>(null);
 
@@ -64,28 +60,13 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   useEffect(() => setNotifyIcons([null]), [videoState.isLoading]);
 
   // Dynamic styles
-  const aspect = props.videoWidth / props.videoHeight;
-  const displayHeight = layoutSize.width / aspect;
-
   const dynamicStyle = {
-    layout: {
-      maxWidth: props.width
-    },
-    composite: {
-      width: layoutSize.width,
-      height: displayHeight
-    },
     videoTiles: {
-      width: layoutSize.width * props.columnCount!,
-      height: displayHeight * props.rowCount!,
-      left: trackCurrentIndex % props.columnCount! * -layoutSize.width,
-      top: Math.floor(trackCurrentIndex / props.columnCount!) * -displayHeight
-    },
-    videoMSE: {
-      width: layoutSize.width,
-      height: displayHeight,
-      left: 0,
-      top: 0
+      position: 'relative' as 'relative',
+      width: props.columnCount! * 100 + '%',
+      height: props.rowCount! * 100 + '%',
+      left: trackCurrentIndex % props.columnCount! * -100 + '%',
+      top: Math.floor(trackCurrentIndex / props.columnCount!) * -100 + '%'
     },
     overlay: {
       backgroundColor: videoState.isLoading ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
@@ -113,51 +94,49 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   };
 
   // Render
-  return <div className='multi-views-dumb-player'>
-    <div ref={layoutRef} className={styles.layout} style={dynamicStyle.layout}>
-
-      <div className={styles.composite} style={dynamicStyle.composite}>
-
-        <Layer style={dynamicStyle.composite}>
-          <video ref={videoRef} className={styles.video} style={isMSE ? dynamicStyle.videoMSE : dynamicStyle.videoTiles}
-                 autoPlay={true} playsInline={true} loop={true}
-                 onClick={onVideoClick}
-                 onContextMenu={event => event.preventDefault()}>
-            {!isMSE && <source src={props.url}/>}
-          </video>
-        </Layer>
-
-        <Layer className={styles.overlayLayer} style={dynamicStyle.overlay}>
-          <div className={styles.overlayContainer}>
-            {
-              NotifyIcons.map<JSX.Element | undefined>((NotifyIcon, index) => {
-                if (!NotifyIcon) return undefined;
-                return <NotifyIcon className={styles.notifyIcon} key={index}/>
-              })
-            }
-            { videoState.isLoading && <div className={styles.loadingIcon} /> }
+  return  <div className={styles.layout}>
+    <div className={styles.composite}>
+      <Layer className={styles.videoLayer}>
+        <div className={styles.videoContainerH}>
+          <div className={styles.videoContainerV}>
+            <video ref={videoRef} className={styles.video} style={isMSE ? {} : dynamicStyle.videoTiles}
+                   autoPlay={true} playsInline={true} loop={true}
+                   onClick={onVideoClick}
+                   onContextMenu={event => event.preventDefault()}>
+              {!isMSE && <source src={props.url}/>}
+            </video>
           </div>
-        </Layer>
-
-      </div>
-
-      <PlaybackControl
-       videoRef={videoRef}
-       videoState={videoState}
-      />
-
-      <TrackControl
-        ref={trackControlRef}
-        trackCount={trackCount} trackCurrentIndex={trackCurrentIndex}
-        onIndicatorClick={trackNumber => setTrackCurrentIndex(trackNumber)}
-      />
-
+        </div>
+      </Layer>
+      <Layer className={styles.overlayLayer} style={dynamicStyle.overlay}>
+        <div className={styles.overlayContainer}>
+          {
+            NotifyIcons.map<JSX.Element | undefined>((NotifyIcon, index) => {
+              if (!NotifyIcon) return undefined;
+              return <NotifyIcon className={styles.notifyIcon} key={index}/>
+            })
+          }
+          { videoState.isLoading && <div className={styles.loadingIcon} /> }
+        </div>
+      </Layer>
     </div>
+
+    <PlaybackControl
+     videoRef={videoRef}
+     videoState={videoState}
+    />
+
+    <TrackControl
+      ref={trackControlRef}
+      trackCount={trackCount} trackCurrentIndex={trackCurrentIndex}
+      onIndicatorClick={trackNumber => setTrackCurrentIndex(trackNumber)}
+    />
+
   </div>
 }
 
 
-function Layer(props: {className?: string, style: React.CSSProperties, children?: React.ReactNode}): JSX.Element {
+function Layer(props: {className?: string, style?: React.CSSProperties, children?: React.ReactNode}): JSX.Element {
   let className = styles.layer;
   if (props.className) className += ' ' + props.className;
   return <div className={className} style={props.style}>

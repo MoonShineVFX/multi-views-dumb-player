@@ -11,8 +11,6 @@ const root = ReactDOM.createRoot(
 
 const MultiViewsDumbPlayerSettings = {
   url: 'an-dance.mp4', // an-dance.mp4 or an-dance-low dataName in MSE
-  videoWidth: 3840,
-  videoHeight: 2160,
   columnCount: 4,
   rowCount: 4,
   core: MultiViewsDumbPlayerCore.TILES
@@ -21,6 +19,14 @@ const MultiViewsDumbPlayerSettings = {
 
 root.render(
   <React.StrictMode>
-    <MultiViewsDumbPlayer {...MultiViewsDumbPlayerSettings} />
+    <div className='mainframe'>
+      <div className='top'></div>
+      <div className='bottom'>
+        <div className='content'>
+          <MultiViewsDumbPlayer {...MultiViewsDumbPlayerSettings} />
+        </div>
+        <div className='chat'></div>
+      </div>
+    </div>
   </React.StrictMode>
 );

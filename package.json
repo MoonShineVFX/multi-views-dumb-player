@@ -1,7 +1,6 @@
 {
   "name": "multi-views-dumb-player",
   "version": "0.0.1",
-  "private": true,
   "main": "src/MultiViewsDumbPlayer.tsx",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
