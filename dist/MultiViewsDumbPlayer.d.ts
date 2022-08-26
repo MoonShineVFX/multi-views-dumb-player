@@ -14,6 +14,7 @@ declare type MultiViewsDumbPlayerProps = {
     columnCount?: number;
     rowCount?: number;
     url: string;
+    host?: string;
     core?: MultiViewsDumbPlayerCore;
     styles?: MultiViewsDumbPlayerStyles;
     colors?: ThemeColors;

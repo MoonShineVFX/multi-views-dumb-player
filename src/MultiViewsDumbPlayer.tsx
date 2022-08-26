@@ -29,6 +29,7 @@ type MultiViewsDumbPlayerProps = {
   columnCount?: number;
   rowCount?: number;
   url: string;
+  host?: string;
   core?: MultiViewsDumbPlayerCore;
   styles?: MultiViewsDumbPlayerStyles;
   colors?: ThemeColors;
@@ -51,7 +52,7 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
       setMsePlayer(new MultiVisionPlayer(
         videoRef.current, props.url,
         {
-          streamHost: `${window.location.protocol}//${window.location.host}`
+          streamHost: props.host || `${window.location.protocol}//${window.location.host}`
         },
         true,
         metadata => setTrackCount(metadata.cameraCount)

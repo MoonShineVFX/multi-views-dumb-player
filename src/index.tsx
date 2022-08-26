@@ -14,6 +14,7 @@ const MultiViewsDumbPlayerSettings = {
   columnCount: 4,
   rowCount: 4,
   core: MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION,
+  host: 'https://mv.moonshine.tw/stream/'
   // styles: {
   //   playback: {borderRadius: '32px', margin: '16px'}
   // },
