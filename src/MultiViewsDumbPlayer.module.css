@@ -38,10 +38,17 @@
   min-height: 0;
   min-width: 0;
   overflow: hidden;
+  position: relative;
+}
+.videoContainerAbs {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
 }
 .video {
   width: 100%;
-  grid-area: layer-div;
 }
 
 .overlayLayer {

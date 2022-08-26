@@ -13,9 +13,6 @@
     cursor: pointer;
     margin: auto;
 }
-.buttonIcon:hover {
-    fill: aquamarine;
-}
 
 /* Volume */
 .volumeContainer {

@@ -1,3 +1,15 @@
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+type Color = RGB | RGBA | HEX | string;
+
+export type ThemeColors = {
+  highlight: Color;
+  main: Color;
+  sub: Color;
+  base: Color;
+}
+
 const SETTINGS = {
   IS_MOBILE: function(): boolean {
     let check = false;

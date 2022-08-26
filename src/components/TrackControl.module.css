@@ -14,10 +14,3 @@
     margin: auto;
     cursor: pointer;
 }
-.indicator:hover {
-    background-color: aquamarine;
-}
-
-.active {
-    background-color: white;
-}

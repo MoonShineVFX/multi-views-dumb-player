@@ -5,6 +5,7 @@ import {IconPlay, IconPause} from './icons';
 
 import useTrackControl from './hooks/useTrackControl';
 import useVideoState from './hooks/useVideoState';
+import { ThemeColors } from './SETTINGS';
 
 import TrackControl from "./components/TrackControl";
 import PlaybackControl from "./components/PlaybackControl";
@@ -17,12 +18,21 @@ export enum MultiViewsDumbPlayerCore {
 }
 
 
+
+type MultiViewsDumbPlayerStyles = {
+  main?: React.CSSProperties;
+  playback?: React.CSSProperties;
+  trackControl?: React.CSSProperties;
+}
+
 type MultiViewsDumbPlayerProps = {
   width?: number;
   columnCount?: number;
   rowCount?: number;
   url: string;
-  core?: MultiViewsDumbPlayerCore
+  core?: MultiViewsDumbPlayerCore;
+  styles?: MultiViewsDumbPlayerStyles;
+  colors?: ThemeColors;
 }
 
 export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
@@ -94,17 +104,19 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   };
 
   // Render
-  return  <div className={styles.layout}>
+  return  <div className={styles.layout} style={props.styles?.main}>
     <div className={styles.composite}>
       <Layer className={styles.videoLayer}>
         <div className={styles.videoContainerH}>
           <div className={styles.videoContainerV}>
-            <video ref={videoRef} className={styles.video} style={isMSE ? {} : dynamicStyle.videoTiles}
-                   autoPlay={true} playsInline={true} loop={true}
-                   onClick={onVideoClick}
-                   onContextMenu={event => event.preventDefault()}>
-              {!isMSE && <source src={props.url}/>}
-            </video>
+            <div className={styles.videoContainerAbs}>
+              <video ref={videoRef} className={styles.video} style={isMSE ? {} : dynamicStyle.videoTiles}
+                     autoPlay={true} playsInline={true} loop={true}
+                     onClick={onVideoClick}
+                     onContextMenu={event => event.preventDefault()}>
+                {!isMSE && <source src={props.url}/>}
+              </video>
+            </div>
           </div>
         </div>
       </Layer>
@@ -122,14 +134,18 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
     </div>
 
     <PlaybackControl
-     videoRef={videoRef}
-     videoState={videoState}
+      videoRef={videoRef}
+      videoState={videoState}
+      style={props.styles?.playback}
+      colors={props.colors}
     />
 
     <TrackControl
       ref={trackControlRef}
       trackCount={trackCount} trackCurrentIndex={trackCurrentIndex}
       onIndicatorClick={trackNumber => setTrackCurrentIndex(trackNumber)}
+      style={props.styles?.trackControl}
+      colors={props.colors}
     />
 
   </div>

@@ -6,12 +6,15 @@ import { VideoState } from "../hooks/useVideoState";
 
 import styles from "./PlaybackControl.module.css";
 import SETTINGS from '../SETTINGS';
+import {ThemeColors} from '../SETTINGS';
 
 
 // PlaybackControl
 type PlaybackControlProps = {
   videoRef: React.RefObject<HTMLVideoElement>;
   videoState: VideoState;
+  style?: React.CSSProperties;
+  colors?: ThemeColors;
 }
 
 export default function PlaybackControl(props: PlaybackControlProps): JSX.Element {
@@ -30,10 +33,11 @@ export default function PlaybackControl(props: PlaybackControlProps): JSX.Elemen
     },
     volumeSliderCore: {
       height: videoState.volume * 100 + '%',
-      backgroundColor: videoState.muted ? 'darkgray' : 'white'
+      backgroundColor: videoState.muted ? props.colors?.sub || 'darkgray' : props.colors?.main || 'white'
     },
     timeBarCore: {
-      width: videoState.currentTime / videoState.duration * 100 + '%'
+      width: videoState.currentTime / videoState.duration * 100 + '%',
+      backgroundColor: props.colors?.main
     }
   }
 
@@ -70,41 +74,56 @@ export default function PlaybackControl(props: PlaybackControlProps): JSX.Elemen
     videoRef.current!.currentTime = seekRatio * videoState.duration;
   }
 
-  return <div className={styles.playbackControl}>
-    <PlayButton isPlaying={videoState.isPlaying} onClick={onPlayButtonClick} />
+  return <div className={styles.playbackControl} style={{...props.style, backgroundColor: props.colors?.base}}>
+    <PlayButton colors={props.colors} isPlaying={videoState.isPlaying} onClick={onPlayButtonClick} />
     {
       !SETTINGS.IS_MOBILE() &&
       <div className={styles.volumeContainer}
            onMouseEnter={() => setIsVolumeHover(true)}
            onMouseLeave={() => setIsVolumeHover(false)}>
         <div className={styles.volumeSliderContainer} style={dynamicStyle.volumeSliderContainer}>
-          <div ref={volumeSliderRef} className={styles.volumeSlider} onClick={onVolumeSliderClick}>
+          <div ref={volumeSliderRef} className={styles.volumeSlider} style={{backgroundColor: props.colors?.base}} onClick={onVolumeSliderClick}>
             <div className={styles.volumeSliderCore} style={dynamicStyle.volumeSliderCore} />
           </div>
         </div>
-        <VolumeButton
+        <ThemeButton
+          Button={VolumeButton}
+          colors={props.colors}
           className={styles.buttonIcon}
           onClick={() => videoRef.current!.muted = !videoRef!.current!.muted} />
       </div>
     }
-    <TimeStampText time={videoState.currentTime} />
-    <div ref={timeBarRef} className={styles.timeBar} onClick={onTimeBarClick}>
+    <TimeStampText time={videoState.currentTime} colors={props.colors} />
+    <div ref={timeBarRef} className={styles.timeBar} style={{backgroundColor: props.colors?.sub}} onClick={onTimeBarClick}>
       <div className={styles.timeBarCore} style={dynamicStyle.timeBarCore} />
     </div>
-    <TimeStampText time={videoState.duration - videoState.currentTime} />
+    <TimeStampText time={videoState.duration - videoState.currentTime} colors={props.colors} />
   </div>
 }
 
 
+// ThemeButton
+function ThemeButton(props: {Button: React.FC<React.SVGProps<SVGSVGElement>>, colors?: ThemeColors, [p:string]: any}): JSX.Element {
+  const {Button, colors, ...passProps} = props;
+  const [isHover, setIsHover] = useState(false);
+  return <Button
+    onPointerEnter={() => setIsHover(true)}
+    onPointerLeave={() => setIsHover(false)}
+    style={{fill: isHover ? colors?.highlight || 'aquamarine' : colors?.main || 'white'}}
+    {...passProps}
+  />
+}
+
+
 // PlayButton
-function PlayButton(props: {isPlaying: boolean, onClick: () => void}): JSX.Element {
+function PlayButton(props: {isPlaying: boolean, onClick: () => void, colors?: ThemeColors}): JSX.Element {
   const CurrentButton = props.isPlaying ? IconPause : IconPlay;
-  return <CurrentButton className={styles.buttonIcon} onClick={props.onClick} />
+  return <ThemeButton Button={CurrentButton} colors={props.colors} className={styles.buttonIcon} onClick={props.onClick} />
 }
 
 
 // TimeStampText
-function TimeStampText(props: { time: number }): JSX.Element {
+function TimeStampText(props: { time: number, colors?: ThemeColors }): JSX.Element {
   const hours = Math.floor(props.time / 3600);
   const minutes = Math.floor((props.time - (hours * 3600)) / 60);
   const seconds = Math.round(props.time - (hours * 3600) - (minutes * 60));
@@ -119,5 +138,5 @@ function TimeStampText(props: { time: number }): JSX.Element {
   }
   resultStr += `${minutesStr}:${secondsStr}`
 
-  return <p className={styles.text}>{resultStr}</p>
+  return <p className={styles.text} style={{color: props.colors?.main}}>{resultStr}</p>
 }
