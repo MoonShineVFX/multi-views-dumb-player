@@ -18,7 +18,6 @@ export enum MultiViewsDumbPlayerCore {
 }
 
 
-
 type MultiViewsDumbPlayerStyles = {
   main?: React.CSSProperties;
   playback?: React.CSSProperties;

@@ -17,12 +17,12 @@ const MultiViewsDumbPlayerSettings = {
   // styles: {
   //   playback: {borderRadius: '32px', margin: '16px'}
   // },
-  colors: {
-    highlight: 'yellow',
-    main: 'red',
-    sub: 'blue',
-    base: 'green'
-  }
+  // colors: {
+  //   highlight: 'yellow',
+  //   main: 'red',
+  //   sub: 'blue',
+  //   base: 'green'
+  // }
 }
 
 
