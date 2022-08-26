@@ -14,7 +14,14 @@ type TrackControlProps = {
 }
 
 function TrackControl(props: TrackControlProps, ref: React.LegacyRef<HTMLDivElement>): JSX.Element {
-  return <div ref={ref} className={styles.control} draggable='false' style={{...props.style, backgroundColor: props.colors?.base}}>
+  return <div
+    ref={ref} className={styles.control} draggable='false'
+    style={{
+      ...props.style,
+      backgroundColor: props.colors?.base,
+      borderTop: '1px solid ' + props.colors?.sub || 'darkgray'
+    }}
+  >
     {new Array(props.trackCount).fill('').map((_, i): JSX.Element => {
       return <TrackIndicator
         key={i} trackNumber={i}

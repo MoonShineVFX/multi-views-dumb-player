@@ -74,7 +74,9 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
     videoTiles: {
       position: 'relative' as 'relative',
       width: props.columnCount! * 100 + '%',
+      maxWidth: props.columnCount! * 100 + '%',
       height: props.rowCount! * 100 + '%',
+      maxHeight: props.rowCount! * 100 + '%',
       left: trackCurrentIndex % props.columnCount! * -100 + '%',
       top: Math.floor(trackCurrentIndex / props.columnCount!) * -100 + '%'
     },
