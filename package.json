@@ -1,6 +1,6 @@
 {
   "name": "multi-views-dumb-player",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "dist/MultiViewsDumbPlayer.js",
   "types": "dist/MultiViewsDumbPlayer.d.ts",
   "dependencies": {
@@ -43,7 +43,6 @@
     "!dist/index.*",
     "!src/index.*"
   ],
-  "type": "module",
   "author": "eli <mrhchief@gmail.com> (https://github.com/elishahung)",
   "repository": {
     "type": "git",
