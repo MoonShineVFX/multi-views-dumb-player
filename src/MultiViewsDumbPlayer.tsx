@@ -40,6 +40,8 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   const isMSE = props.core === MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION;
 
   // Hooks
+  const [errorMessage, setErrorMessage] = useState('');
+  const isError = errorMessage !== '';
   const [trackCount, setTrackCount] = useState(isMSE ? 1 : props.columnCount! * props.rowCount!);
   const [trackCurrentIndex, setTrackCurrentIndex, trackControlRef] = useTrackControl(trackCount);
   const [videoRef, videoState] = useVideoState();
@@ -55,7 +57,8 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
           streamHost: props.host || `${window.location.protocol}//${window.location.host}`
         },
         true,
-        metadata => setTrackCount(metadata.cameraCount)
+        metadata => setTrackCount(metadata.cameraCount),
+        errorMessage => setErrorMessage(errorMessage)
       ));
     }
   }, [isMSE, videoRef.current]);
@@ -81,7 +84,7 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
       top: Math.floor(trackCurrentIndex / props.columnCount!) * -100 + '%'
     },
     overlay: {
-      backgroundColor: videoState.isLoading ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
+      backgroundColor: (videoState.isLoading || isError) ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
     }
   };
 
@@ -107,16 +110,16 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
 
   // Render
   return  <div className={styles.layout} style={props.styles?.main}>
-    <div className={styles.composite}>
+    <div className={styles.composite} onClick={onVideoClick}>
       <Layer className={styles.videoLayer}>
         <div className={styles.videoContainerH}>
           <div className={styles.videoContainerV}>
             <div className={styles.videoContainerAbs}>
               <video ref={videoRef} className={styles.video} style={isMSE ? {} : dynamicStyle.videoTiles}
                      autoPlay={true} playsInline={true} loop={true}
-                     onClick={onVideoClick}
-                     onContextMenu={event => event.preventDefault()}>
-                {!isMSE && <source src={props.url}/>}
+                     onContextMenu={event => event.preventDefault()}
+                     onError={() => setErrorMessage('Failed to load resource.')}>
+                {!isMSE && <source src={(props.host || '') + props.url}/>}
               </video>
             </div>
           </div>
@@ -130,7 +133,8 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
               return <NotifyIcon className={styles.notifyIcon} key={index}/>
             })
           }
-          { videoState.isLoading && <div className={styles.loadingIcon} /> }
+          { isError && <p className={styles.errorMessage}>{errorMessage}</p>}
+          { (videoState.isLoading && !isError) && <div className={styles.loadingIcon} /> }
         </div>
       </Layer>
     </div>

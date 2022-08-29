@@ -80,3 +80,4 @@ function useTrackControl(trackCount) {
     return [trackCurrentIndex, setTrackCurrentIndex, trackBarRef];
 }
 exports.default = useTrackControl;
+//# sourceMappingURL=useTrackControl.js.map

@@ -68,6 +68,9 @@
   align-items: center;
 }
 
+.errorMessage {
+  color: red;
+}
 
 /* Notify */
 .notifyIcon {

@@ -8,3 +8,4 @@ export declare type VideoState = {
     muted: boolean;
 };
 export default function useVideoState(): [React.RefObject<HTMLVideoElement>, VideoState];
+//# sourceMappingURL=useVideoState.d.ts.map

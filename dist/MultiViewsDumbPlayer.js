@@ -34,17 +34,19 @@ function MultiViewsDumbPlayer(props) {
     // Defines
     var isMSE = props.core === MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION;
     // Hooks
-    var _d = (0, react_1.useState)(isMSE ? 1 : props.columnCount * props.rowCount), trackCount = _d[0], setTrackCount = _d[1];
-    var _e = (0, useTrackControl_1.default)(trackCount), trackCurrentIndex = _e[0], setTrackCurrentIndex = _e[1], trackControlRef = _e[2];
-    var _f = (0, useVideoState_1.default)(), videoRef = _f[0], videoState = _f[1];
-    var _g = (0, react_1.useState)(null), msePlayer = _g[0], setMsePlayer = _g[1];
+    var _d = (0, react_1.useState)(''), errorMessage = _d[0], setErrorMessage = _d[1];
+    var isError = errorMessage !== '';
+    var _e = (0, react_1.useState)(isMSE ? 1 : props.columnCount * props.rowCount), trackCount = _e[0], setTrackCount = _e[1];
+    var _f = (0, useTrackControl_1.default)(trackCount), trackCurrentIndex = _f[0], setTrackCurrentIndex = _f[1], trackControlRef = _f[2];
+    var _g = (0, useVideoState_1.default)(), videoRef = _g[0], videoState = _g[1];
+    var _h = (0, react_1.useState)(null), msePlayer = _h[0], setMsePlayer = _h[1];
     // MSE Video addons
     (0, react_1.useEffect)(function () {
         if (isMSE && videoRef.current && !msePlayer) {
             console.log('initial: ', videoRef.current);
             setMsePlayer(new multi_vision_player_1.default(videoRef.current, props.url, {
                 streamHost: props.host || "".concat(window.location.protocol, "//").concat(window.location.host)
-            }, true, function (metadata) { return setTrackCount(metadata.cameraCount); }));
+            }, true, function (metadata) { return setTrackCount(metadata.cameraCount); }, function (errorMessage) { return setErrorMessage(errorMessage); }));
         }
     }, [isMSE, videoRef.current]);
     (0, react_1.useEffect)(function () {
@@ -53,7 +55,7 @@ function MultiViewsDumbPlayer(props) {
         }
     }, [trackCurrentIndex]);
     // Motify Icons
-    var _h = (0, react_1.useState)([null]), NotifyIcons = _h[0], setNotifyIcons = _h[1];
+    var _j = (0, react_1.useState)([null]), NotifyIcons = _j[0], setNotifyIcons = _j[1];
     (0, react_1.useEffect)(function () { return setNotifyIcons([null]); }, [videoState.isLoading]);
     // Dynamic styles
     var dynamicStyle = {
@@ -67,7 +69,7 @@ function MultiViewsDumbPlayer(props) {
             top: Math.floor(trackCurrentIndex / props.columnCount) * -100 + '%'
         },
         overlay: {
-            backgroundColor: videoState.isLoading ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
+            backgroundColor: (videoState.isLoading || isError) ? 'rgba(0, 0, 0, 0.5)' : 'transparent'
         }
     };
     // Video play/pause notify
@@ -91,11 +93,11 @@ function MultiViewsDumbPlayer(props) {
         }
     };
     // Render
-    return (0, jsx_runtime_1.jsxs)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.layout, style: (_a = props.styles) === null || _a === void 0 ? void 0 : _a.main }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.composite }, { children: [(0, jsx_runtime_1.jsx)(Layer, __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoLayer }, { children: (0, jsx_runtime_1.jsx)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoContainerH }, { children: (0, jsx_runtime_1.jsx)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoContainerV }, { children: (0, jsx_runtime_1.jsx)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoContainerAbs }, { children: (0, jsx_runtime_1.jsx)("video", __assign({ ref: videoRef, className: MultiViewsDumbPlayer_module_css_1.default.video, style: isMSE ? {} : dynamicStyle.videoTiles, autoPlay: true, playsInline: true, loop: true, onClick: onVideoClick, onContextMenu: function (event) { return event.preventDefault(); } }, { children: !isMSE && (0, jsx_runtime_1.jsx)("source", { src: props.url }) })) })) })) })) })), (0, jsx_runtime_1.jsx)(Layer, __assign({ className: MultiViewsDumbPlayer_module_css_1.default.overlayLayer, style: dynamicStyle.overlay }, { children: (0, jsx_runtime_1.jsxs)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.overlayContainer }, { children: [NotifyIcons.map(function (NotifyIcon, index) {
+    return (0, jsx_runtime_1.jsxs)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.layout, style: (_a = props.styles) === null || _a === void 0 ? void 0 : _a.main }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.composite, onClick: onVideoClick }, { children: [(0, jsx_runtime_1.jsx)(Layer, __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoLayer }, { children: (0, jsx_runtime_1.jsx)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoContainerH }, { children: (0, jsx_runtime_1.jsx)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoContainerV }, { children: (0, jsx_runtime_1.jsx)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.videoContainerAbs }, { children: (0, jsx_runtime_1.jsx)("video", __assign({ ref: videoRef, className: MultiViewsDumbPlayer_module_css_1.default.video, style: isMSE ? {} : dynamicStyle.videoTiles, autoPlay: true, playsInline: true, loop: true, onContextMenu: function (event) { return event.preventDefault(); }, onError: function () { return setErrorMessage('Failed to load resource.'); } }, { children: !isMSE && (0, jsx_runtime_1.jsx)("source", { src: (props.host || '') + props.url }) })) })) })) })) })), (0, jsx_runtime_1.jsx)(Layer, __assign({ className: MultiViewsDumbPlayer_module_css_1.default.overlayLayer, style: dynamicStyle.overlay }, { children: (0, jsx_runtime_1.jsxs)("div", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.overlayContainer }, { children: [NotifyIcons.map(function (NotifyIcon, index) {
                                     if (!NotifyIcon)
                                         return undefined;
                                     return (0, jsx_runtime_1.jsx)(NotifyIcon, { className: MultiViewsDumbPlayer_module_css_1.default.notifyIcon }, index);
-                                }), videoState.isLoading && (0, jsx_runtime_1.jsx)("div", { className: MultiViewsDumbPlayer_module_css_1.default.loadingIcon })] })) }))] })), (0, jsx_runtime_1.jsx)(PlaybackControl_1.default, { videoRef: videoRef, videoState: videoState, style: (_b = props.styles) === null || _b === void 0 ? void 0 : _b.playback, colors: props.colors }), (0, jsx_runtime_1.jsx)(TrackControl_1.default, { ref: trackControlRef, trackCount: trackCount, trackCurrentIndex: trackCurrentIndex, onIndicatorClick: function (trackNumber) { return setTrackCurrentIndex(trackNumber); }, style: (_c = props.styles) === null || _c === void 0 ? void 0 : _c.trackControl, colors: props.colors })] }));
+                                }), isError && (0, jsx_runtime_1.jsx)("p", __assign({ className: MultiViewsDumbPlayer_module_css_1.default.errorMessage }, { children: errorMessage })), (videoState.isLoading && !isError) && (0, jsx_runtime_1.jsx)("div", { className: MultiViewsDumbPlayer_module_css_1.default.loadingIcon })] })) }))] })), (0, jsx_runtime_1.jsx)(PlaybackControl_1.default, { videoRef: videoRef, videoState: videoState, style: (_b = props.styles) === null || _b === void 0 ? void 0 : _b.playback, colors: props.colors }), (0, jsx_runtime_1.jsx)(TrackControl_1.default, { ref: trackControlRef, trackCount: trackCount, trackCurrentIndex: trackCurrentIndex, onIndicatorClick: function (trackNumber) { return setTrackCurrentIndex(trackNumber); }, style: (_c = props.styles) === null || _c === void 0 ? void 0 : _c.trackControl, colors: props.colors })] }));
 }
 exports.MultiViewsDumbPlayer = MultiViewsDumbPlayer;
 function Layer(props) {
@@ -104,3 +106,4 @@ function Layer(props) {
         className += ' ' + props.className;
     return (0, jsx_runtime_1.jsx)("div", __assign({ className: className, style: props.style }, { children: props.children }));
 }
+//# sourceMappingURL=MultiViewsDumbPlayer.js.map

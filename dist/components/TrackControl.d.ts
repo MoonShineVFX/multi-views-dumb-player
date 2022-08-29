@@ -10,3 +10,4 @@ declare type TrackControlProps = {
 };
 declare const _default: React.ForwardRefExoticComponent<TrackControlProps & React.RefAttributes<HTMLDivElement>>;
 export default _default;
+//# sourceMappingURL=TrackControl.d.ts.map

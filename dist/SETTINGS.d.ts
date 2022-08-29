@@ -13,3 +13,4 @@ declare const SETTINGS: {
     TRACK_SWIPE_SPEED: number;
 };
 export default SETTINGS;
+//# sourceMappingURL=SETTINGS.d.ts.map

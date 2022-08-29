@@ -21,3 +21,4 @@ declare type MultiViewsDumbPlayerProps = {
 };
 export declare function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element;
 export {};
+//# sourceMappingURL=MultiViewsDumbPlayer.d.ts.map

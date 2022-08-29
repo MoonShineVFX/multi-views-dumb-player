@@ -77,7 +77,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
         setVideoState({
           ...videoState,
           isLoading: true
-        })
+        });
         break;
       // Volume
       case 'volumechange':
@@ -85,7 +85,7 @@ export default function useVideoState(): [React.RefObject<HTMLVideoElement>, Vid
           ...videoState,
           volume: videoRef.current!.volume,
           muted: videoRef.current!.muted
-        })
+        });
         break;
       // Bypass
       default:

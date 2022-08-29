@@ -60,3 +60,4 @@ function TrackIndicator(props) {
             props.onClick(props.trackNumber);
         } });
 }
+//# sourceMappingURL=TrackControl.js.map

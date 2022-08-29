@@ -116,3 +116,4 @@ function TimeStampText(props) {
     resultStr += "".concat(minutesStr, ":").concat(secondsStr);
     return (0, jsx_runtime_1.jsx)("p", __assign({ className: PlaybackControl_module_css_1.default.text, style: { color: (_a = props.colors) === null || _a === void 0 ? void 0 : _a.main } }, { children: resultStr }));
 }
+//# sourceMappingURL=PlaybackControl.js.map

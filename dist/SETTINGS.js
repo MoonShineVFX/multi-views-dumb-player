@@ -10,3 +10,4 @@ var SETTINGS = {
     TRACK_SWIPE_SPEED: 0.5
 };
 exports.default = SETTINGS;
+//# sourceMappingURL=SETTINGS.js.map

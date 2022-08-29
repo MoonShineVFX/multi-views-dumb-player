@@ -10,11 +10,11 @@ const root = ReactDOM.createRoot(
 
 
 const MultiViewsDumbPlayerSettings = {
-  url: 'an-dance-low', // an-dance.mp4 or an-dance-low dataName in MSE
+  url: 'an-dance', // an-dance.mp4 or an-dance-low dataName in MSE
   columnCount: 4,
   rowCount: 4,
   core: MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION,
-  host: 'https://mv.moonshine.tw/stream/'
+  // host: 'https://mv.moonshine.tw/stream/'
   // styles: {
   //   playback: {borderRadius: '32px', margin: '16px'}
   // },
