@@ -1,6 +1,6 @@
 {
   "name": "multi-views-dumb-player",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "main": "dist/MultiViewsDumbPlayer.js",
   "types": "dist/MultiViewsDumbPlayer.d.ts",
   "dependencies": {
@@ -14,7 +14,7 @@
     "build": "npm run clean && npm run compile && npm run copy-files",
     "clean": "rimraf dist/",
     "compile": "tsc --noEmit false --sourceMap true --declarationMap true",
-    "copy-files": "copyfiles -u 1 src/**/*.html src/**/*.svg src/**/*.css dist/"
+    "copy-files": "copyfiles -u 1 \"src/**/*.html\" \"src/**/*.svg\" \"src/**/*.css\" dist/"
   },
   "homepage": "https://github.com/MoonShineVFX/multi-views-dumb-player",
   "eslintConfig": {
