@@ -1,6 +1,6 @@
 {
   "name": "multi-views-dumb-player",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "dist/MultiViewsDumbPlayer.js",
   "types": "dist/MultiViewsDumbPlayer.d.ts",
   "dependencies": {

@@ -126,7 +126,7 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
                      autoPlay={true} playsInline={true} loop={true}
                      onContextMenu={event => event.preventDefault()}
                      onError={() => setErrorMessage('Failed to load resource.')}>
-                {!isMSE && <source src={(props.host || '') + props.url}/>}
+                {!isMSE && <source src={(props.host || '') + '/' + props.url}/>}
               </video>
             </div>
           </div>
