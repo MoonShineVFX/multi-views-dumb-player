@@ -33,11 +33,13 @@ type MultiViewsDumbPlayerProps = {
   core?: MultiViewsDumbPlayerCore;
   styles?: MultiViewsDumbPlayerStyles;
   colors?: ThemeColors;
+  onVideoPlaying?: (videoTime: number) => void;
 }
 
 export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Element {
   // Defines
   const isMSE = props.core === MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION;
+  const isLive = props.core === MultiViewsDumbPlayerCore.MEDIA_SOURCE_EXTENSION && props.url === 'stream';
 
   // Hooks
   const [errorMessage, setErrorMessage] = useState('');
@@ -46,6 +48,11 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   const [trackCurrentIndex, setTrackCurrentIndex, trackControlRef] = useTrackControl(trackCount);
   const [videoRef, videoState] = useVideoState();
   const [msePlayer, setMsePlayer] = useState<MultiVisionPlayer | null>(null);
+
+  // VideoState callback
+  useEffect(() => {
+    if (props.onVideoPlaying) props.onVideoPlaying(videoState.currentTime)
+  }, [videoState.currentTime]);
 
   // MSE Video addons
   useEffect(() => {
@@ -68,7 +75,7 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
     }
   }, [trackCurrentIndex]);
 
-  // Motify Icons
+  // Notify Icons
   const [NotifyIcons, setNotifyIcons] = useState<(React.FC<React.SVGProps<SVGSVGElement>> | null)[]>([null]);
   useEffect(() => setNotifyIcons([null]), [videoState.isLoading]);
 
@@ -142,6 +149,7 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
     <PlaybackControl
       videoRef={videoRef}
       videoState={videoState}
+      isLive={isLive}
       style={props.styles?.playback}
       colors={props.colors}
     />

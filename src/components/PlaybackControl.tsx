@@ -13,13 +13,14 @@ import {ThemeColors} from '../SETTINGS';
 type PlaybackControlProps = {
   videoRef: React.RefObject<HTMLVideoElement>;
   videoState: VideoState;
+  isLive: boolean;
   style?: React.CSSProperties;
   colors?: ThemeColors;
 }
 
 export default function PlaybackControl(props: PlaybackControlProps): JSX.Element {
   // Defines
-  const { videoState, videoRef } = props;
+  const { videoState, videoRef, isLive } = props;
   
   // Hooks
   const [isVolumeHover, setIsVolumeHover] = useState(false);
@@ -97,7 +98,10 @@ export default function PlaybackControl(props: PlaybackControlProps): JSX.Elemen
     <div ref={timeBarRef} className={styles.timeBar} style={{backgroundColor: props.colors?.sub}} onClick={onTimeBarClick}>
       <div className={styles.timeBarCore} style={dynamicStyle.timeBarCore} />
     </div>
-    <TimeStampText time={videoState.duration - videoState.currentTime} colors={props.colors} />
+    {isLive ?
+      <p className={styles.text} style={{color: props.colors?.main}}>Live</p> :
+      <TimeStampText time={videoState.duration - videoState.currentTime} colors={props.colors} />
+    }
   </div>
 }
 

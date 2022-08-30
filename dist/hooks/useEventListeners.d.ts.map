@@ -1,1 +1,0 @@
-{"version":3,"file":"useEventListeners.d.ts","sourceRoot":"","sources":["../../src/hooks/useEventListeners.ts"],"names":[],"mappings":"AAAA,OAAO,KAA+B,MAAM,OAAO,CAAC;AAGpD,MAAM,CAAC,OAAO,UAAU,iBAAiB,CACvC,GAAG,EAAE,KAAK,CAAC,SAAS,CAAC,WAAW,CAAC,EACjC,UAAU,EAAE,MAAM,EAAE,EACpB,QAAQ,EAAE,CAAC,KAAK,EAAE,KAAK,KAAK,IAAI,EAChC,OAAO,GAAE,uBAA4B,GACpC,IAAI,CAgBN"}
