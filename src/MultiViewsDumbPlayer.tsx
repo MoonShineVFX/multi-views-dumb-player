@@ -28,6 +28,7 @@ type MultiViewsDumbPlayerProps = {
   width?: number;
   columnCount?: number;
   rowCount?: number;
+  cameraCount?: number;
   url: string;
   host?: string;
   core?: MultiViewsDumbPlayerCore;
@@ -44,7 +45,7 @@ export function MultiViewsDumbPlayer(props: MultiViewsDumbPlayerProps): JSX.Elem
   // Hooks
   const [errorMessage, setErrorMessage] = useState('');
   const isError = errorMessage !== '';
-  const [trackCount, setTrackCount] = useState(isMSE ? 1 : props.columnCount! * props.rowCount!);
+  const [trackCount, setTrackCount] = useState(isMSE ? 1 : props.cameraCount ? props.cameraCount : props.columnCount! * props.rowCount!);
   const [trackCurrentIndex, setTrackCurrentIndex, trackControlRef] = useTrackControl(trackCount);
   const [videoRef, videoState] = useVideoState();
   const [msePlayer, setMsePlayer] = useState<MultiVisionPlayer | null>(null);
