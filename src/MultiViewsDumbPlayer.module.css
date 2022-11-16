@@ -33,6 +33,14 @@
   flex-direction: column;
   justify-content: center;
 }
+
+/* iOS aspect ratio bug */
+@supports (-webkit-touch-callout: none) {
+  .videoContainerH {
+    width: 100%;
+  }
+}
+
 .videoContainerV {
   aspect-ratio: 16/9;
   min-height: 0;
